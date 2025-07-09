@@ -3,41 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Caro AI</title>
-  <style>
-    body {
-      text-align: center;
-      position: relative;
-    }
-    #board {
-      display: grid;
-      grid-template-columns: repeat(15, 40px);
-      grid-template-rows: repeat(15, 40px);
-      gap: 0;
-      margin: 0 auto;
-      border: 1px solid #000;
-    }
-    .cell {
-      width: 40px;
-      height: 40px;
-      border: 1px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    .x { color: blue; }
-    .o { color: red; }
-    #reset-btn {
-      margin-top: 20px;
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <h1>Caro AI</h1>
-  <div id="board"></div>
-  <button id="reset-btn">Chơi lại</button>
-
+  <div id="board-container">
+    <div id="board"></div>
+    <canvas id="win-line"></canvas>
+  </div>
+  <button id="reset-btn" style="display:none;">Chơi lại</button>
   <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
