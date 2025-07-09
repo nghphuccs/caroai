@@ -1,0 +1,22 @@
+#board {
+  display: grid;
+  grid-template-columns: repeat(15, 40px);
+  grid-template-rows: repeat(15, 40px);
+  border: 2px solid #333;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.cell.x { color: green; }
+.cell.o { color: red; }
+.cell.last-move { border: 2px solid orange; }
+#win-line { position: absolute; top: 0; left: 0; pointer-events: none; }
