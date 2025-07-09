@@ -4,16 +4,16 @@ from datetime import datetime
 import smtplib
 from email.message import EmailMessage
 
-import ai  # Thuật toán AI minimax của bạn
+import ai  # Thuật toán minimax AI gốc của bạn
 
 app = Flask(__name__)
 
-
+# Route chính
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
+# Route AI move
 @app.route("/ai-move", methods=["POST"])
 def ai_move():
     data = request.json
@@ -21,7 +21,7 @@ def ai_move():
     move = ai.find_best_move(board)
     return jsonify({"move": move})
 
-
+# Route lưu kết quả & gửi mail
 @app.route("/save-result", methods=["POST"])
 def save_result():
     data = request.get_json()
@@ -31,22 +31,30 @@ def save_result():
 
     line = f"{player_name} {result} ({time_now})\n"
 
-    # ✅ Lưu file TXT
+    # Lưu vào file TXT
     with open("history.txt", "a", encoding="utf-8") as f:
         f.write(line)
 
-  
+    print("✅ Đã lưu file TXT:", line.strip())
+
+    # Gửi mail
     send_email(player_name, line)
 
     return jsonify({"status": "ok", "saved": line})
 
-
-
+# Hàm gửi mail
 def send_email(player_name, result_text):
-    sender = "caroaimailnhp@gmail.com" 
-    password = os.environ.get("MAIL_PASSWORD") 
+    sender = "caroaimailnhp@gmail.com"
+    password = os.environ.get("MAIL_PASSWORD")  # Phải set biến môi trường
 
-    receiver = "caroaimailnhp@gmail.com"  
+    # In ra để debug xem biến có nhận đúng không
+    print(f"✅ DEBUG: MAIL_PASSWORD = '{password}'")
+
+    if not password:
+        print("❌ LỖI: Chưa có MAIL_PASSWORD! Kiểm tra biến môi trường trên Render.")
+        return
+
+    receiver = "caroaimailnhp@gmail.com"  # Nhận cùng mail cũng được
 
     msg = EmailMessage()
     msg.set_content(result_text)
@@ -54,14 +62,15 @@ def send_email(player_name, result_text):
     msg['From'] = sender
     msg['To'] = receiver
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(sender, password)
-        smtp.send_message(msg)
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(sender, password)
+            smtp.send_message(msg)
+        print("✅ Đã gửi mail thành công!")
+    except Exception as e:
+        print("❌ LỖI khi gửi mail:", e)
 
-    print("đã lưu!")
-
-
-
+# Run app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
