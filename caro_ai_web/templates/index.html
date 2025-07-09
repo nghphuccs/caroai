@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Caro AI</title>
   <style>
     body {
       text-align: center;
       position: relative;
     }
-
-    canvas {
-      border: 1px solid #000;
-      display: block;
+    #board {
+      display: grid;
+      grid-template-columns: repeat(15, 40px);
+      grid-template-rows: repeat(15, 40px);
+      gap: 0;
       margin: 0 auto;
+      border: 1px solid #000;
     }
-
-    #replay-btn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 10px 20px;
-      font-size: 18px;
+    .cell {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .x { color: blue; }
+    .o { color: red; }
+    #reset-btn {
+      margin-top: 20px;
       display: none;
-      z-index: 10;
     }
   </style>
 </head>
 <body>
   <h1>Caro AI</h1>
-  <canvas id="board"></canvas>
-
-  <!-- NÚT CHƠI LẠI ở giữa màn hình -->
-  <button id="replay-btn">Chơi lại</button>
+  <div id="board"></div>
+  <button id="reset-btn">Chơi lại</button>
 
   <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
