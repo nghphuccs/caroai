@@ -54,11 +54,11 @@ canvas.addEventListener("click", async (e) => {
     showWin(-1);
   }
 });
-
 function drawBoard() {
+  // Xóa canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // kẻ lưới
+
+  // Kẻ lưới caro
   ctx.strokeStyle = "#000";
   for (let i = 0; i <= SIZE; i++) {
     ctx.beginPath();
@@ -72,7 +72,7 @@ function drawBoard() {
     ctx.stroke();
   }
 
-  // quân cờ
+  // Vẽ quân cờ
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
       if (board[y][x] !== 0) {
@@ -86,20 +86,27 @@ function drawBoard() {
     }
   }
 
-  // viền nước cờ vừa đi
+  // Viền nước cờ vừa đi
   if (lastMove) {
     const [x, y] = lastMove;
     ctx.strokeStyle = "orange";
     ctx.lineWidth = 3;
     ctx.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1; // reset lại
   }
 
-  // vẽ đường win
+  // Vẽ đường thắng nếu có
   if (winLine) {
     drawWinLine(winLine.start, winLine.end);
   }
+
+  // ✍️ Chữ ký bản quyền
+  ctx.font = "14px Arial";
+  ctx.fillStyle = "rgba(0,0,0,0.5)"; // mờ nhẹ
+  ctx.textAlign = "right";
+  ctx.fillText("© Nguyễn Hoàng Phúc KHMT2311040", canvas.width - 5, canvas.height - 5);
 }
+
 
 function checkWin(player) {
   for (let y = 0; y < SIZE; y++) {
