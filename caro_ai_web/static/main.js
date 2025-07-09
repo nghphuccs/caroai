@@ -164,10 +164,24 @@ function showWin(player) {
   gameOver = true;
   drawBoard();
   setTimeout(() => {
-    alert((player === 1 ? "Bạn" : "AI") + " thắng!");
-    replayButton.style.display = "block";
+    const playerName = prompt("Nhập tên của bạn:");
+    const resultText = `${playerName} ${player === 1 ? "thắng" : "thua"} AI vào ${new Date().toLocaleString()}`;
+    
+    // Gửi lên server để lưu file txt
+    fetch("/save-result", {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: playerName,
+        result: resultText
+      })
+    }).then(() => {
+      alert(resultText);
+      replayButton.style.display = "block";
+    });
   }, 100);
 }
+
 
 
 drawBoard();
