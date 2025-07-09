@@ -1,14 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Caro AI Web</title>
-  <script src="/static/main.js"></script>
+  <meta charset="UTF-8" />
+  <title>Caro AI</title>
   <style>
-    canvas { border: 1px solid black; }
+    table { border-collapse: collapse; }
+    td { width: 40px; height: 40px; border: 1px solid #000; text-align: center; font-size: 24px; }
   </style>
 </head>
 <body>
   <h1>Caro AI</h1>
-  <canvas id="board" width="600" height="600"></canvas>
+  <table id="board"></table>
+
+  <script>
+    const SIZE = 15;
+    const board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+    const table = document.getElementById('board');
+
+    for (let y = 0; y < SIZE; y++) {
+      const row = table.insertRow();
+      for (let x = 0; x < SIZE; x++) {
+        const cell = row.insertCell();
+        cell.onclick = () => playerMove(x, y, cell);
+      }
+    }
+
+    function playerMove(x, y, cell) {
+      if (board[y][x] !== 0) return;
+      board[y][x] = 1;
+      cell.textContent = 'X';
+      fetch('/ai-move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ board })
+      }).then(res => res.json()).then(data => {
+        const [ax, ay] = data.move;
+        board[ay][ax] = -1;
+        table.rows[ay].cells[ax].textContent = 'O';
+      });
+    }
+  </script>
 </body>
 </html>
