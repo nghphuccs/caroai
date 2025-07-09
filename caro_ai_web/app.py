@@ -1,8 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-import os
-
-# Giả sử bạn có file ai.py chứa hàm find_best_move
-import ai  
 
 app = Flask(__name__)
 
@@ -12,12 +8,24 @@ def index():
 
 @app.route("/ai-move", methods=["POST"])
 def ai_move():
-    data = request.json
+    # Ở đây chỉ là ví dụ AI random ô trống:
+    data = request.get_json()
     board = data["board"]
-    move = ai.find_best_move(board)  # Gọi hàm AI Python
-    return jsonify({"move": move})
+    SIZE = 15
+    for y in range(SIZE):
+        for x in range(SIZE):
+            if board[y][x] == 0:
+                return jsonify({"move": [x, y]})
+    return jsonify({"move": None})
+
+@app.route("/save-history", methods=["POST"])
+def save_history():
+    data = request.get_json()
+    record = data.get("record", "")
+    if record:
+        with open("history.txt", "a", encoding="utf-8") as f:
+            f.write(record + "\n")
+    return jsonify({"status": "success"})
 
 if __name__ == "__main__":
-    # Quan trọng: Render set biến môi trường PORT
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
