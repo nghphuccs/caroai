@@ -153,3 +153,5 @@ function showWin(player) {
     replayButton.style.display = "block";
   }, 100);
 }
+
+drawBoard();
