@@ -1,4 +1,4 @@
-vẫn chưa hiện lưới khi load web const SIZE = 15;
+const SIZE = 15;
 let board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
 let lastMove = null;
 let winLine = null;
