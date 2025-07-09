@@ -56,50 +56,34 @@ canvas.addEventListener("click", async (e) => {
 });
 
 function drawBoard() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // kẻ lưới
-  ctx.strokeStyle = "#000";
-  for (let i = 0; i <= SIZE; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * CELL_SIZE, 0);
-    ctx.lineTo(i * CELL_SIZE, SIZE * CELL_SIZE);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(0, i * CELL_SIZE);
-    ctx.lineTo(SIZE * CELL_SIZE, i * CELL_SIZE);
-    ctx.stroke();
-  }
-
-  // quân cờ
+  const container = document.getElementById("board");
+  container.innerHTML = "";
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
-      if (board[y][x] !== 0) {
-        const cx = x * CELL_SIZE + CELL_SIZE / 2;
-        const cy = y * CELL_SIZE + CELL_SIZE / 2;
-        ctx.beginPath();
-        ctx.fillStyle = board[y][x] === 1 ? "green" : "red";
-        ctx.arc(cx, cy, 12, 0, 2 * Math.PI);
-        ctx.fill();
+      const cell = document.createElement("div");
+      cell.className = "cell";  // <-- Luôn thêm class 'cell'
+      
+      if (board[y][x] === 1) {
+        cell.textContent = "X";
+        cell.classList.add("x");
+      } else if (board[y][x] === -1) {
+        cell.textContent = "O";
+        cell.classList.add("o");
+      } else {
+        cell.textContent = "";  // <-- Đảm bảo ô trống không lỗi
       }
+
+      if (lastMove && lastMove[0] === x && lastMove[1] === y) {
+        cell.classList.add("last-move");
+      }
+
+      cell.onclick = () => handleClick(x, y);
+      container.appendChild(cell);
     }
   }
-
-  // viền nước cờ vừa đi
-  if (lastMove) {
-    const [x, y] = lastMove;
-    ctx.strokeStyle = "orange";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-    ctx.lineWidth = 1;
-  }
-
-  // vẽ đường win
-  if (winLine) {
-    drawWinLine(winLine.start, winLine.end);
-  }
+  drawWinLine();
 }
+
 
 function checkWin(player) {
   for (let y = 0; y < SIZE; y++) {
