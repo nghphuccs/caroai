@@ -7,6 +7,7 @@
     body {
       text-align: center;
       position: relative;
+      font-family: sans-serif;
     }
 
     #board {
@@ -21,13 +22,16 @@
     }
 
     .cell {
-      border: 1px solid #999;
+      border: 1px solid #ccc;
       width: 40px;
       height: 40px;
       box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      cursor: pointer;
     }
 
     .cell.x { color: green; }
@@ -48,9 +52,11 @@
 </head>
 <body>
   <h1>Caro AI</h1>
+
+  <!-- ❗❗ Bắt buộc: SỬ DỤNG DIV chứ KHÔNG dùng canvas -->
   <div id="board"></div>
 
-  <!-- NÚT CHƠI LẠI ở giữa màn hình -->
+  <!-- Nút chơi lại -->
   <button id="replay-btn">Chơi lại</button>
 
   <script src="{{ url_for('static', filename='main.js') }}"></script>
