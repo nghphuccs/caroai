@@ -35,18 +35,18 @@ def save_result():
     with open("history.txt", "a", encoding="utf-8") as f:
         f.write(line)
 
-    # ✅ Gửi mail
+  
     send_email(player_name, line)
 
     return jsonify({"status": "ok", "saved": line})
 
 
-# ✅ Hàm gửi mail
-def send_email(player_name, result_text):
-    sender = "caroainhpmail@gmail.com"
-    password = os.environ.get("xygr yibr aahv gxkc")
 
-    receiver = "caroainhpmail@gmail.com" 
+def send_email(player_name, result_text):
+    sender = "caroaimailnhp@gmail.com" 
+    password = os.environ.get("MAIL_PASSWORD") 
+
+    receiver = "caroaimailnhp@gmail.com"  
 
     msg = EmailMessage()
     msg.set_content(result_text)
@@ -58,7 +58,8 @@ def send_email(player_name, result_text):
         smtp.login(sender, password)
         smtp.send_message(msg)
 
-    print("✅ Đã gửi mail thành công!")
+    print("đã lưu!")
+
 
 
 if __name__ == "__main__":
