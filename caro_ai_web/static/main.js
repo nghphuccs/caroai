@@ -10,6 +10,7 @@ let board = Array(SIZE).fill().map(() => Array(SIZE).fill(0));
 let gameOver = false;
 let lastMove = null;
 let winLine = null;
+let isPlayerTurn = true; // 💡 Biến mới: quản lý lượt đi
 
 // Nút chơi lại
 const replayButton = document.getElementById("replay-btn");
@@ -19,18 +20,20 @@ replayButton.addEventListener("click", () => {
   gameOver = false;
   lastMove = null;
   winLine = null;
+  isPlayerTurn = true; // ✅ Reset lượt
   replayButton.style.display = "none";
   drawBoard();
 });
 
+// Click trên canvas
 canvas.addEventListener("click", async (e) => {
-  if (gameOver) return;
+  if (gameOver || !isPlayerTurn) return; // ✅ Chặn nếu chưa tới lượt
   const rect = canvas.getBoundingClientRect();
   const x = Math.floor((e.clientX - rect.left) / CELL_SIZE);
   const y = Math.floor((e.clientY - rect.top) / CELL_SIZE);
   if (board[y][x] !== 0) return;
 
-  board[y][x] = 1; // người chơi
+  board[y][x] = 1; // Người chơi đi
   lastMove = [x, y];
   drawBoard();
 
@@ -39,6 +42,9 @@ canvas.addEventListener("click", async (e) => {
     return;
   }
 
+  isPlayerTurn = false; // ✅ Khoá lượt người chơi
+
+  // Gọi AI
   const res = await fetch("/ai-move", {
     method: "POST",
     headers: {'Content-Type': 'application/json'},
@@ -52,13 +58,17 @@ canvas.addEventListener("click", async (e) => {
 
   if (checkWin(-1)) {
     showWin(-1);
+    return;
   }
+
+  isPlayerTurn = true; // ✅ Mở lượt lại
 });
+
+// Vẽ bàn cờ, quân cờ, bản quyền, vạch thắng
 function drawBoard() {
-  // Xóa canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Kẻ lưới caro
+  // Vẽ lưới
   ctx.strokeStyle = "#000";
   for (let i = 0; i <= SIZE; i++) {
     ctx.beginPath();
@@ -92,7 +102,7 @@ function drawBoard() {
     ctx.strokeStyle = "orange";
     ctx.lineWidth = 3;
     ctx.strokeRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-    ctx.lineWidth = 1; // reset lại
+    ctx.lineWidth = 1;
   }
 
   // Vẽ đường thắng nếu có
@@ -100,13 +110,11 @@ function drawBoard() {
     drawWinLine(winLine.start, winLine.end);
   }
 
-  // ✍️ Chữ ký bản quyền
-  ctx.font = "14px Arial";
-  ctx.fillStyle = "rgba(0,0,0,0.5)"; // mờ nhẹ
-  ctx.textAlign = "right";
-  ctx.fillText("© Nguyễn Hoàng Phúc KHMT2311040", canvas.width - 5, canvas.height - 5);
+  // 📌 Chữ ký bản quyền
+  ctx.fillStyle = "#888";
+  ctx.font = "12px Arial";
+  ctx.fillText("© Nguyễn Hoàng Phúc - KHMT2311040", 10, canvas.height - 10);
 }
-
 
 function checkWin(player) {
   for (let y = 0; y < SIZE; y++) {
@@ -160,5 +168,6 @@ function showWin(player) {
     replayButton.style.display = "block";
   }, 100);
 }
+
 
 drawBoard();
