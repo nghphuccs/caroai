@@ -7,36 +7,13 @@
     body {
       text-align: center;
       position: relative;
-      font-family: sans-serif;
     }
 
-    #board {
-      display: grid;
-      grid-template-columns: repeat(15, 40px);
-      grid-template-rows: repeat(15, 40px);
-      gap: 0;
-      width: 600px;
-      height: 600px;
-      margin: 0 auto;
+    canvas {
       border: 1px solid #000;
+      display: block;
+      margin: 0 auto;
     }
-
-    .cell {
-      border: 1px solid #ccc;
-      width: 40px;
-      height: 40px;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .cell.x { color: green; }
-    .cell.o { color: red; }
-    .last-move { outline: 2px solid blue; }
 
     #replay-btn {
       position: absolute;
@@ -52,11 +29,9 @@
 </head>
 <body>
   <h1>Caro AI</h1>
+  <canvas id="board"></canvas>
 
-  <!-- ❗❗ Bắt buộc: SỬ DỤNG DIV chứ KHÔNG dùng canvas -->
-  <div id="board"></div>
-
-  <!-- Nút chơi lại -->
+  <!-- NÚT CHƠI LẠI ở giữa màn hình -->
   <button id="replay-btn">Chơi lại</button>
 
   <script src="{{ url_for('static', filename='main.js') }}"></script>
