@@ -37,7 +37,7 @@ def save_result():
     return jsonify({"status": "ok", "saved": line})
 
 def send_email(player_name, result_text):
-    sender = "caroaimailnhp@gmail.com"
+    sender = "caroainhpmail@gmail.com"
     password = os.environ.get("MAIL_PASSWORD")
 
     print(f"✅ DEBUG: MAIL_PASSWORD = '{password}'")
@@ -45,7 +45,7 @@ def send_email(player_name, result_text):
         print("❌ LỖI: Chưa có MAIL_PASSWORD! Kiểm tra biến môi trường.")
         return
 
-    receiver = "caroaimailnhp@gmail.com"
+    receiver = "caroainhpmail@gmail.com"
 
     msg = EmailMessage()
     msg.set_content(result_text)
