@@ -96,4 +96,7 @@ document.getElementById("reset-btn").onclick = () => {
   drawBoard();
 };
 
-drawBoard();
+window.onload = function() {
+  drawBoard();
+};
+
