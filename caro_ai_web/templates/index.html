@@ -1,18 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Caro AI</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      text-align: center;
+      position: relative;
+    }
+
+    canvas {
+      border: 1px solid #000;
+      display: block;
+      margin: 0 auto;
+    }
+
+    #replay-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 10px 20px;
+      font-size: 18px;
+      display: none;
+      z-index: 10;
+    }
+  </style>
 </head>
 <body>
   <h1>Caro AI</h1>
-  <div id="board-container">
-    <div id="board"></div>
-    <canvas id="win-line" width="600" height="600"></canvas>
-  </div>
-  <button id="reset-btn" style="display:none;">Chơi lại</button>
+  <canvas id="board"></canvas>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <!-- NÚT CHƠI LẠI ở giữa màn hình -->
+  <button id="replay-btn">Chơi lại</button>
+
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>
